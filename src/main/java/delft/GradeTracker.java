@@ -45,6 +45,8 @@ public class GradeTracker {
 		return numCourses == 0 ? 0 : totalGPA / numCourses;
 	}
 
+
+
 	public List<String> getCoursesWithFewerThanFiveGrades() {
 		List<String> result = new ArrayList<>();
 		for (Course course : courses.values()) {
@@ -67,13 +69,7 @@ public class GradeTracker {
 		return course.calculateRequiredFinalScoreForA();
 	}
 
-	public Course getCourse(String math) {
-		return courses.get(math);
-	}
 
-	public void addCourse(String courseName) {
-		Course course = new Course(courseName);
-		courses.put(courseName, course);
 
-	}
+
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Course.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">delft.GradeTrackerTest</a> &gt; <a href="index.source.html" class="el_package">delft</a> &gt; <span class="el_source">Course.java</span></div><h1>Course.java</h1><pre class="source lang-java linenums">package delft;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// Represents a course and its grades
+class Course {
+    private String courseName;
+    private List&lt;Double&gt; grades;
+    private List&lt;Integer&gt; weights;
+
+<span class="fc" id="L12">    public Course(String courseName) {</span>
+<span class="fc" id="L13">        this.courseName = courseName;</span>
+<span class="fc" id="L14">        this.grades = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L15">        this.weights = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L16">    }</span>
+
+    public void addGrade(double grade, int weight) {
+<span class="fc" id="L19">        grades.add(grade);</span>
+<span class="fc" id="L20">        weights.add(weight);</span>
+<span class="fc" id="L21">    }</span>
+
+    public double calculateCurrentGrade() {
+<span class="fc" id="L24">        double totalWeightedScore = 0;</span>
+<span class="fc" id="L25">        double totalWeights = 0;</span>
+
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        for (int i = 0; i &lt; grades.size(); i++) {</span>
+<span class="fc" id="L28">            totalWeightedScore += grades.get(i) * weights.get(i);</span>
+<span class="fc" id="L29">            totalWeights += weights.get(i);</span>
+        }
+
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        return totalWeights == 0 ? 0 : totalWeightedScore / totalWeights;</span>
+    }
+
+    public boolean hasAtLeastFiveGrades() {
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        return grades.size() &gt;= 5;</span>
+    }
+
+    public int getNumberOfGrades() {
+<span class="fc" id="L40">        return grades.size();</span>
+    }
+
+    public String getCourseName() {
+<span class="fc" id="L44">        return courseName;</span>
+    }
+
+    public double calculateRequiredFinalScoreForA() {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (grades.size() &lt; 5) {</span>
+<span class="fc" id="L49">            throw new IllegalStateException(&quot;Need at least 5 grades to calculate required final score.&quot;);</span>
+        }
+
+<span class="fc" id="L52">        double currentGrade = calculateCurrentGrade();</span>
+<span class="fc" id="L53">        double currentWeightedTotal = currentGrade * (grades.size() * 1.0); // Normalized weight so far</span>
+<span class="fc" id="L54">        double requiredTotal = 90 * (grades.size() + 5); // Target for an A, with final worth 5X</span>
+
+<span class="fc" id="L56">        return (requiredTotal - currentWeightedTotal) / 5; // Weight of final is 5X</span>
+    }
+
+    public double calculateGPA() {
+<span class="fc" id="L60">        double percentageGrade = calculateCurrentGrade();</span>
+<span class="fc" id="L61">        return convertPercentageToGPA(percentageGrade);</span>
+    }
+
+    private double convertPercentageToGPA(double percentage) {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (percentage &gt;= 97) return 4.25; // A+</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (percentage &gt;= 93) return 4.0; // A</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (percentage &gt;= 90) return 3.7; // A-</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (percentage &gt;= 87) return 3.3; // B+</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (percentage &gt;= 83) return 3.0; // B</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (percentage &gt;= 80) return 2.7; // B-</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (percentage &gt;= 77) return 2.3; // C+</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (percentage &gt;= 73) return 2.0; // C</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (percentage &gt;= 70) return 1.7; // C-</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (percentage &gt;= 67) return 1.3; // D+</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (percentage &gt;= 63) return 1.0; // D</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (percentage &gt;= 60) return 0.7; // D-</span>
+<span class="fc" id="L77">        return 0.0; // F</span>
+    }
+
+    public List&lt;Double&gt; getGrades() {
+<span class="fc" id="L81">        return grades;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
